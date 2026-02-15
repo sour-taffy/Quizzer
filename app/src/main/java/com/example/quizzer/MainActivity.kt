@@ -4,12 +4,18 @@ import Flashcard
 import QuizInstance
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
-import android.widget.Button
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -26,6 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 import com.example.quizzer.ui.theme.QuizzerTheme
 
@@ -50,20 +58,121 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             QuizzerTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Slide(
+                var started by remember {mutableStateOf(false)}
 
-                    )
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                 //   Slide(
+
+                  //  )
+                    if (started)
+                    {
+                        Slide { started = false }
+
+                    }
+                    else {
+                        MainMenu { started = true };
+                    }
+
                 }
             }
         }
     }
 }
+
 val q = QuizInstance()
 var tts: TextToSpeech? = null
 //
+
+
 @Composable
-fun Slide() {
+fun MainMenu(notStarted: () -> Unit) {
+
+    var quizzes =List(4){"Quiz Name"}
+    var onQuizClick: (String) -> Unit = { notStarted() }
+
+
+
+    Column (
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text("Ultimate Quizzer", fontSize = 40.sp);
+        LazyColumn(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+
+            ) {
+            items(quizzes) { b ->
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { onQuizClick(b) }
+
+                    )
+            {
+                Text(b);
+            }
+
+                }
+
+
+
+
+
+
+            /*  Button(
+                onClick = notStarted,
+
+                colors = ButtonDefaults.buttonColors(
+
+                ),
+                contentPadding = PaddingValues(50.dp, 40.dp)
+
+            ) {
+                Text("Quiz Name", fontSize = 30.sp)
+            }
+            Button(
+                onClick = {
+
+
+                },
+                colors = ButtonDefaults.buttonColors(
+
+                ),
+                contentPadding = PaddingValues(50.dp, 40.dp)
+            ) {
+                Text("Quiz Name2", fontSize = 30.sp)
+            }
+
+
+        }
+
+           */
+        }
+        Button(
+            onClick = {
+
+
+            },
+
+            colors = ButtonDefaults.buttonColors(
+
+            ),
+            contentPadding = PaddingValues(50.dp, 10.dp)
+
+        ) {
+            Text("Import New", fontSize = 30.sp)
+        }
+    }
+
+
+
+
+
+}
+
+
+@Composable
+fun Slide(quizzing: () -> Unit) {
 
 
 
@@ -229,7 +338,7 @@ fun Slide() {
 @Composable
 fun GreetingPreview() {
     QuizzerTheme {
-        Slide()
+
 
     }
 }
